@@ -5,6 +5,22 @@
 
 #include <pcl/visualization/cloud_viewer.h>
 
+void PCLViewer::DisplayPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &point_cloud_ptr) {
+    pcl::visualization::PCLVisualizer viewer("3d viewer");
+
+    viewer.setBackgroundColor(0.0, 0.0, 0.0);
+
+    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> single_color(point_cloud_ptr, 255, 0, 0);
+    viewer.addPointCloud<pcl::PointXYZ>(point_cloud_ptr, single_color, "point cloud");
+    viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "point cloud");
+    viewer.addCoordinateSystem (5.0);
+    viewer.initCameraParameters ();
+
+    while (!viewer.wasStopped()){
+        viewer.spin();
+    }
+}
+
 void PCLViewer::DisplayPointCloud(const ModelData::TypeVertexVector &points) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>());
 
@@ -26,10 +42,19 @@ void PCLViewer::DisplayPointCloud(const ModelData::TypeVertexVector &points) {
         cloud_ptr->push_back(pcl_point);
     }
 
-    pcl::visualization::CloudViewer viewer("point cloud");
-    viewer.showCloud(cloud_ptr);
+    pcl::visualization::PCLVisualizer viewer("3d viewer");
 
-    while (!viewer.wasStopped()){}
+    viewer.setBackgroundColor(0.0, 0.0, 0.0);
+
+    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> single_color(cloud_ptr, 255, 0, 0);
+    viewer.addPointCloud<pcl::PointXYZ>(cloud_ptr, single_color, "point cloud");
+    viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "point cloud");
+//    viewer.addCoordinateSystem (5.0);
+    viewer.initCameraParameters ();
+
+    while (!viewer.wasStopped()){
+        viewer.spin();
+    }
 }
 
 void PCLViewer::DisplayPointCloud(const Eigen::MatrixXd &points) {

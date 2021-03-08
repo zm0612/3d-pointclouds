@@ -17,7 +17,7 @@ int main(int argc, char** argv){
     Vector3ds normal_vectors;
 
     SurfaceNormalEstimation surface_normal_estimation;
-    normal_vectors = surface_normal_estimation.CalculateNormalVector(model_data.vertices_, 1.0);
+    normal_vectors = surface_normal_estimation.CalculateNormalVector(model_data.vertices_, 6.0);
 
     PCLViewer::DisplayNormalVector(model_data.vertices_, normal_vectors);
 

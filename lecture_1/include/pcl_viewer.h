@@ -12,6 +12,7 @@ class PCLViewer{
 public:
     PCLViewer() = default;
 
+    static void DisplayPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr& point_cloud_ptr);
     static void DisplayPointCloud(const ModelData::TypeVertexVector& points);
     static void DisplayPointCloud(const Eigen::MatrixXd& points);
     static void DisplayNormalVector(const ModelData::TypeVertexVector& points,

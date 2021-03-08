@@ -17,7 +17,13 @@ public:
     void FilterByCentroid(Vector3ds& target_points);
     void FilterByRandom(Vector3ds& target_points);
 
+    struct SearchIndex {
+        unsigned int voxel_index;
+        unsigned int point_index;
+    };
+
 private:
+
     ModelData::TypeVertexVector source_points_;
     ModelData::TypeVertexVector target_points_;
 

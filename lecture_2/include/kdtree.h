@@ -1,0 +1,51 @@
+//
+// Created by Zhang Zhimeng on 2021/3/13.
+//
+
+#ifndef LECTURE_2_KDTREE_H
+#define LECTURE_2_KDTREE_H
+
+#include "data_type.h"
+#include <vector>
+#include <limits>
+
+class KDTree{
+public:
+    KDTree();
+
+    void BuildTree(const PointCloudPtr& point_cloud_ptr, unsigned int leaf_size);
+
+    std::vector<unsigned int> QueryNearestNeighbor(const int number);
+
+private:
+    enum AXIS{X=0, Y, Z};
+
+    struct Node{
+        Node(AXIS axis, double value, Node* left, Node* right,
+             const std::vector<unsigned int>& point_indices)
+             : axis_(axis), value_(value), left_ptr_(left)
+             , right_ptr_(right), point_indices_(point_indices){}
+
+        AXIS axis_;
+        float value_ = std::numeric_limits<float>::min();
+        Node* left_ptr_ = nullptr;
+        Node* right_ptr_ = nullptr;
+        std::vector<unsigned int> point_indices_;
+
+        bool IsLeaf() const{
+            return value_ == std::numeric_limits<float>::min();
+        }
+    };
+
+    Node* node_ptr_ = nullptr;
+
+    Node* KDTreeRecursiveBuild(Node* root, const PointCloudPtr& point_cloud_ptr,
+                               const std::vector<unsigned int>& point_indices,
+                               AXIS axis, unsigned int leaf_size);
+
+    std::vector<unsigned int> SortKeyByValue(const std::vector<unsigned int>& point_indices,
+                                             const PointCloudPtr& point_cloud_ptr,
+                                             const AXIS& axis);
+};
+
+#endif //LECTURE_2_KDTREE_H

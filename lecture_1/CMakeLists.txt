@@ -23,9 +23,6 @@ add_library(DEP SHARED
 )
 target_link_libraries(DEP ${ALL_TARGET_LIBRARIES})
 
-#add_executable(test_main app/test.cpp)
-#target_link_libraries(test_main DEP)
-
 ####### TEST ########
 add_executable(test_read_model_data test/test_read_model_data.cpp)
 target_link_libraries(test_read_model_data DEP)

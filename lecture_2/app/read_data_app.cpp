@@ -7,7 +7,7 @@
 int main(int argc, char** argv){
     PointCloudPtr point_cloud_ptr(new PointCloud);
 
-    std::string point_file_path = "/home/meng/code_my/3d_point_clouds/lecture_2/data/000000.bin";
+    std::string point_file_path = "../data/000000.bin";
     ReadData::Read(point_file_path, point_cloud_ptr);
 
     PCLViewer::DisplayPointCloud(point_cloud_ptr);

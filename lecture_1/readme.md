@@ -99,17 +99,17 @@ Eigen::MatrixXd PrincipleComponentAnalysis::Encoder(unsigned int dim) {
 
 a.当选取主成分中的三个时，得到的点云与原来的点云没有区别，效果如下：
 
-![2021-03-09 17-41-05 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 17-41-05 的屏幕截图.png)
+![a](image/a.png)
 
 b.当选取主成分中的前两个时，飞机高度方向的信息被压缩了，效果如下：
 
-![2021-03-09 17-34-55 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 17-34-55 的屏幕截图.png)
+![b](image/b.png)
 
-![2021-03-09 17-34-41 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 17-34-41 的屏幕截图.png)
+![c](image/c.png)
 
 c.当选取主向量中最大的那一个时，飞机的宽度和高度被压缩，只剩下长度信息
 
-![2021-03-09 17-39-29 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 17-39-29 的屏幕截图.png)
+![d](image/d.png)
 
 时间：对于airplane0627数据集，其中有一万多个点，但是作业中实现的代码，只需要0.000779902s就能完成主向量的计算。
 
@@ -160,17 +160,18 @@ Vector3ds SurfaceNormalEstimation::CalculateNormalVector(const ModelData::TypeVe
 
 ②：实验结果
 
-时间：对于airplane0627数据集，其中有一万多个点，在采用暴力搜索的方案中，将半径设为5m，大于需要7.34671可以求解出整个飞机的法向量，效果如下：
+时间：对于airplane0627数据集，其中有一万多个点，在采用暴力搜索的方案中，将半径设为5m，大于需要7.34671s可以求解出整个飞机的法向量，效果如下：
 
-![2021-03-09 17-59-26 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 17-59-26 的屏幕截图.png)
+![e](image/e.png)
 
 问题：在求解法向量时，作业中实现的方法会过分依赖于数据点的形态，以及搜索半径，不同的搜索半径可能得到的结果大不相同。以下两张图分别将搜索半径设置为5m和1m，可以看到设置为1m时法向量的计算结果很差。
 
-![2021-03-09 18-00-22 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 18-00-22 的屏幕截图.png)
+![f](image/f.png)
 
-![2021-03-09 18-00-51 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 18-00-51 的屏幕截图.png)
+![g](image/g.png)
 
 ## 4. Downsample each object using voxel grid downsampling (exact, both centroid &random). Visualize the results.
+
 ①对于voxel filter算法的实现，可以看考代码中的`voxel_filter.cpp`，方法完全是按照ppt中的讲解进行的实现。
 
 在构造函数中，输入`voxel grid`的大小
@@ -287,11 +288,11 @@ void VoxelFilter::FilterByCentroid(Vector3ds &target_points) {
 
 pcl库自带voxel filter算法
 
-![2021-03-09 18-15-05 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 18-15-05 的屏幕截图.png)
+![h](image/h.png)
 
 作业中实现的算法：
 
-![2021-03-09 18-15-24 的屏幕截图](/home/meng/code_my/3d_point_clouds/lecture_1/image/2021-03-09 18-15-24 的屏幕截图.png)
+![i](image/i.png)
 
 结论：
 

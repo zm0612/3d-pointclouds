@@ -11,7 +11,7 @@
 
 class KDTree{
 public:
-    KDTree();
+    KDTree() = default;
 
     void BuildTree(const PointCloudPtr& point_cloud_ptr, unsigned int leaf_size);
 
@@ -39,13 +39,25 @@ private:
 
     Node* node_ptr_ = nullptr;
 
-    Node* KDTreeRecursiveBuild(Node* root, const PointCloudPtr& point_cloud_ptr,
+    Node* KDTreeRecursiveBuild(Node*& root, const PointCloudPtr& point_cloud_ptr,
                                const std::vector<unsigned int>& point_indices,
                                AXIS axis, unsigned int leaf_size);
 
     std::vector<unsigned int> SortKeyByValue(const std::vector<unsigned int>& point_indices,
                                              const PointCloudPtr& point_cloud_ptr,
                                              const AXIS& axis);
+
+    AXIS AxisRoundRobin(const AXIS axis){
+        constexpr unsigned int dim = 3;
+        AXIS axis_temp;
+        if (axis == (AXIS)dim-1){
+            axis_temp = AXIS::X;
+        } else{
+            axis_temp =(AXIS)((int)axis + 1);
+        }
+
+        return axis_temp;
+    }
 };
 
 #endif //LECTURE_2_KDTREE_H

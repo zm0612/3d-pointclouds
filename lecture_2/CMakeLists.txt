@@ -21,9 +21,9 @@ add_library(DEPEND_LIB SHARED
 )
 target_link_libraries(DEPEND_LIB ${ALL_TARGET_LIBRARIES})
 
-#add_executable(kdtree_app app/kdtree_app.cpp)
-#target_link_libraries(kdtree_app DEPEND_LIB)
-#
+add_executable(kdtree_app app/kdtree_app.cpp)
+target_link_libraries(kdtree_app DEPEND_LIB)
+
 #add_executable(octree_app app/octree_app.cpp)
 #target_link_libraries(octree_app DEPEND_LIB)
 

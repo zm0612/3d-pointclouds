@@ -106,3 +106,7 @@ std::vector<unsigned int> KDTree::SortKeyByValue(const std::vector<unsigned int>
 
     return sorted_indices;
 }
+
+std::vector<unsigned int> KDTree::QueryNearestNeighbor(const int number) {
+    
+}

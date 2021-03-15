@@ -58,6 +58,8 @@ private:
 
         return axis_temp;
     }
+
+    Node* KDTreeKNNSearch(Node*&, const PointCloudPtr& point_cloud_ptr, );
 };
 
 #endif //LECTURE_2_KDTREE_H

@@ -18,6 +18,7 @@ add_library(DEPEND_LIB SHARED
     src/octree.cpp
     src/read_data.cpp
     src/pcl_viewer.cpp
+    src/knn_result_set.cpp
 )
 target_link_libraries(DEPEND_LIB ${ALL_TARGET_LIBRARIES})
 

@@ -31,3 +31,6 @@ target_link_libraries(kdtree_app DEPEND_LIB)
 
 add_executable(read_data_app app/read_data_app.cpp)
 target_link_libraries(read_data_app DEPEND_LIB)
+
+add_executable(compare_my_to_pcl app/compare_my_to_pcl.cpp)
+target_link_libraries(compare_my_to_pcl DEPEND_LIB)

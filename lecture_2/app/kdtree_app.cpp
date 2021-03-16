@@ -31,7 +31,7 @@ int main(int argc, char** argv){
     point_eigen.y() = point.y;
     point_eigen.z() = point.z;
 
-    query_indices = kd_tree.QueryNearestNeighbor(5000, point_eigen);
+    query_indices = kd_tree.QueryNearestNeighbor(10000, point_eigen);
     std::chrono::steady_clock::time_point t2_query = std::chrono::steady_clock::now();
     std::chrono::duration<double> time_used_query = std::chrono::duration_cast<std::chrono::duration<double>>(t2_query-t1_query);
     std::cout << "query use time: " << time_used_query.count() * 1000 << " ms" << std::endl;
@@ -44,14 +44,10 @@ int main(int argc, char** argv){
     std::vector<std::pair<unsigned int, float>> result_brute_force_search;
     BruteForceSearch brute_force_search(point_cloud_ptr);
     std::chrono::steady_clock::time_point t3_bsf = std::chrono::steady_clock::now();
-    result_brute_force_search = brute_force_search.QueryPoints(point_eigen, 5000);
+    result_brute_force_search = brute_force_search.QueryPoints(point_eigen, 10000);
     std::chrono::steady_clock::time_point t4_bsf = std::chrono::steady_clock::now();
     std::chrono::duration<double> time_used_bsf = std::chrono::duration_cast<std::chrono::duration<double>>(t4_bsf-t3_bsf);
     std::cout << "bfs use time: " << time_used_bsf.count() * 1000 << " ms" << std::endl;
-
-//    for (unsigned int i = 0; i < result_brute_force_search.size(); ++i) {
-//        std::cout << "min dist with BFS: " << result_brute_force_search[i].second << std::endl;
-//    }
 
     PointCloudPtr result_bfs_point_cloud_ptr(new PointCloud);
     for (unsigned int i = 0; i < result_brute_force_search.size(); ++i) {

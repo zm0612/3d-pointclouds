@@ -15,6 +15,10 @@ public:
     PCLViewer() = default;
 
     static void DisplayPointCloud(const PointCloudPtr& point_cloud_ptr);
+
+    static void DisplayQueryResult(const PointCloudPtr& point_cloud_ptr,
+                                   const Point& query_point,
+                                   const PointCloudPtr& result_point_ptr);
 };
 
 #endif //LECTURE_2_PCL_VIEWER_H

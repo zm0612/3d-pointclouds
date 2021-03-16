@@ -34,10 +34,14 @@ public:
 
     void AddPoint(const float dist, const unsigned int index);
 
+    std::vector<unsigned int> GetPointIndices();
+
 private:
     unsigned int capacity_;
     unsigned int count_ = 0;
     float worst_dist_ = std::numeric_limits<float>::max();
+
+public:
     std::vector<DistIndex> dist_index_list_;
 };
 

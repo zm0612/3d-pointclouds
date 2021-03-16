@@ -22,6 +22,15 @@ unsigned int KNNResultSet::Size() {
     return count_;
 }
 
+std::vector<unsigned int> KNNResultSet::GetPointIndices() {
+    std::vector<unsigned int> point_indices;
+    for (unsigned int i = 0; i < dist_index_list_.size(); ++i) {
+        point_indices.emplace_back(dist_index_list_[i].index_);
+    }
+
+    return point_indices;
+}
+
 void KNNResultSet::AddPoint(const float dist, const unsigned int index) {
     if (dist > worst_dist_){
         return;

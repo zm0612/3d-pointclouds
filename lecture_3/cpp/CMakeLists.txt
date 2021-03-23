@@ -4,7 +4,7 @@ project(cluster)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+#set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 set(ALL_TARGET_LIBRARIES "")
 
@@ -15,6 +15,7 @@ include_directories(include)
 
 add_library(DEP_LIB SHARED
     src/kmeans.cpp
+    src/viewer.cpp
 )
 target_link_libraries(DEP_LIB ${ALL_TARGET_LIBRARIES})
 

@@ -9,25 +9,33 @@
 #include <vector>
 #include <random>
 
-class Kmeans{
+class Kmeans {
 public:
-    struct Cluster{
+    struct Cluster {
         Eigen::VectorXd center_;
-        Eigen::MatrixXd points_;
+        std::vector<Eigen::VectorXd> points_;
     };
 
-    Kmeans(unsigned int K);
+    Kmeans(unsigned int K, unsigned int max_iter, double distance_threshold);
 
-    void Clustering(const Eigen::MatrixXd& source_points);
+    void Clustering(const std::vector<Eigen::VectorXd> &source_points);
+
+    std::vector<Cluster> GetCluster() const;
 
     std::vector<Cluster> clusters_;
 
 private:
     void InitKCenters();
 
+    void ClearClusterPoint();
+
+    double CalculateCenter();
+
 private:
+    unsigned int max_iter_ = 0;
     unsigned int K_ = 0;
-    Eigen::MatrixXd source_points_;
+    double distance_threshold_ = 0.0;
+    std::vector<Eigen::VectorXd> source_points_;
 };
 
 #endif //CLUSTER_KMEANS_H

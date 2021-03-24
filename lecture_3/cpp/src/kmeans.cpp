@@ -2,6 +2,7 @@
 // Created by Zhang Zhimeng on 2021/3/22.
 //
 #include "kmeans.h"
+#include "viewer.h"
 #include <iostream>
 
 Kmeans::Kmeans(unsigned int K, unsigned int max_iter, double distance_threshold)
@@ -38,6 +39,7 @@ double Kmeans::CalculateCenter() {
     for (unsigned int i = 0; i < K_; ++i) {
         Eigen::VectorXd center;
         center.resize(clusters_[0].points_[0].rows());
+        center.setZero();
         for (const auto & point : clusters_[i].points_) {
             center += point;
         }
@@ -73,10 +75,10 @@ void Kmeans::Clustering(const std::vector<Eigen::VectorXd> &source_points) {
         }
 
         double delta_dist = CalculateCenter();
+        std::cout << "iteration: " << i << "  delta distance: " << delta_dist << std::endl;
 
         if (delta_dist < distance_threshold_){
-            std::cout << "iteration: " << i << std::endl;
-            std::cout << "delta distance less than threshold!" << std::endl;
+            std::cout << "delta distance less than threshold: " << distance_threshold_ << std::endl;
             break;
         }
     }

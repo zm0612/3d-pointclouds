@@ -10,8 +10,8 @@ void PCLViewer::DisplayPointCloud(std::vector<Kmeans::Cluster> clusters) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr source_points_ptr(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::PointCloud<pcl::PointXYZ>::Ptr center_points_ptr(new pcl::PointCloud<pcl::PointXYZ>());
 
-    for (int i = 0; i < clusters.size(); ++i) {
-        for (int j = 0; j < clusters[i].points_.size(); ++j) {
+    for (unsigned int i = 0; i < clusters.size(); ++i) {
+        for (unsigned int j = 0; j < clusters[i].points_.size(); ++j) {
             pcl::PointXYZ point_xyz;
             point_xyz.x = clusters[i].points_[j].x();
             point_xyz.y = clusters[i].points_[j].y();

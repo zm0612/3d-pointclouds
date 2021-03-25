@@ -43,9 +43,12 @@ double Kmeans::CalculateCenter() {
         for (const auto & point : clusters_[i].points_) {
             center += point;
         }
-        Eigen::VectorXd new_center = center / static_cast<double>(clusters_[i].points_.size());
-        delta_dist += (clusters_[i].center_ - new_center).norm();
-        clusters_[i].center_ = new_center;
+
+        if(clusters_[i].points_.size() != 0){
+            Eigen::VectorXd new_center = center / static_cast<double>(clusters_[i].points_.size());
+            delta_dist += (clusters_[i].center_ - new_center).norm();
+            clusters_[i].center_ = new_center;    
+        }
     }
 
     return delta_dist;

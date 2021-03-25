@@ -1,0 +1,4 @@
+/home/meng/code_my/3d-pointclouds/lecture_3/cpp/build/CMakeFiles/rebuild_cache.dir
+/home/meng/code_my/3d-pointclouds/lecture_3/cpp/build/CMakeFiles/DEP_LIB.dir
+/home/meng/code_my/3d-pointclouds/lecture_3/cpp/build/CMakeFiles/edit_cache.dir
+/home/meng/code_my/3d-pointclouds/lecture_3/cpp/build/CMakeFiles/test_kmeans.dir

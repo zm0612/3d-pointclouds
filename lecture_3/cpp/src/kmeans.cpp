@@ -44,7 +44,7 @@ double Kmeans::CalculateCenter() {
             center += point;
         }
 
-        if(clusters_[i].points_.size() != 0){
+        if(!clusters_[i].points_.empty()){
             Eigen::VectorXd new_center = center / static_cast<double>(clusters_[i].points_.size());
             delta_dist += (clusters_[i].center_ - new_center).norm();
             clusters_[i].center_ = new_center;    
@@ -66,7 +66,7 @@ void Kmeans::Clustering(const std::vector<Eigen::VectorXd> &source_points) {
             Eigen::VectorXd point = source_points_[j];
             double min_dist = std::numeric_limits<double>::max();
             int cluster_index = -1;
-            for (int k = 0; k < K_; ++k) {
+            for (unsigned int k = 0; k < K_; ++k) {
                 double dist = (point - clusters_[k].center_).norm();
                 if (dist < min_dist){
                     min_dist = dist;

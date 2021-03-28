@@ -13,6 +13,8 @@ public:
     PCLViewer() = default;
 
     static void DisplayPointCloud(std::vector<Kmeans::Cluster> clusters);
+
+    static void DisplayPointCloud(std::vector<Eigen::Vector3d> points);
 };
 
 #endif //CLUSTER_VIEWER_H

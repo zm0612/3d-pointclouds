@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 plt.style.use('seaborn')
 
+
 class GMM(object):
     def __init__(self, n_clusters, max_iter=50):
         self.__K = n_clusters

@@ -24,7 +24,7 @@ int main(int argc, char** argv){
         points.emplace_back(center_3);
     }
 
-    Kmeans kmeans(20, 300, 0.000001);
+    Kmeans kmeans(4u, 300u, 0.000001);
 
     TicToc tic_toc(true);
     kmeans.Clustering(points);

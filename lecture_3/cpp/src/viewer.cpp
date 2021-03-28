@@ -37,7 +37,34 @@ void PCLViewer::DisplayPointCloud(std::vector<Kmeans::Cluster> clusters) {
     viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 15, "point cloud 1");
     viewer.initCameraParameters();
 
-    while (!viewer.wasStopped()){
+    while (!viewer.wasStopped()) {
+        viewer.spin();
+    }
+}
+
+void PCLViewer::DisplayPointCloud(std::vector<Eigen::Vector3d> points) {
+    pcl::visualization::PCLVisualizer viewer("viewer");
+    viewer.setBackgroundColor(0.3, 0.3, 0.3);
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr source_points_ptr(new pcl::PointCloud<pcl::PointXYZ>());
+
+    for (unsigned int i = 0; i < points.size(); ++i) {
+        pcl::PointXYZ point_xyz;
+        point_xyz.x = points[i].x();
+        point_xyz.y = points[i].y();
+        point_xyz.z = points[i].z();
+
+        source_points_ptr->push_back(point_xyz);
+    }
+
+    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> single_color_0(source_points_ptr, 255, 255, 255);
+
+    viewer.addPointCloud<pcl::PointXYZ>(source_points_ptr, single_color_0, "point cloud 0");
+
+    viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "point cloud 0");
+    viewer.initCameraParameters();
+
+    while (!viewer.wasStopped()) {
         viewer.spin();
     }
 }

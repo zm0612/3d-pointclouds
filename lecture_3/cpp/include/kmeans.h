@@ -32,9 +32,9 @@ private:
     double CalculateCenter();
 
 private:
-    unsigned int max_iter_ = 0;
-    unsigned int K_ = 0;
-    double distance_threshold_ = 0.0;
+    unsigned int K_;
+    unsigned int max_iter_;
+    double distance_threshold_;
     std::vector<Eigen::VectorXd> source_points_;
 };
 

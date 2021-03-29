@@ -13,14 +13,17 @@ class GMM {
 public:
 
     struct Cluster{
+        std::vector<Eigen::VectorXd> points_;
         Eigen::VectorXd mu_;
         Eigen::MatrixXd covariance_;
         double pi_;
     };
 
-    GMM(unsigned int K, unsigned int max_iteration);
+    GMM(unsigned int K, unsigned int max_iteration, double threshold);
 
     void Fit(const std::vector<Eigen::VectorXd> &source_points);
+
+    std::vector<Cluster> GetClusters();
 
 private:
     void InitPara();
@@ -37,7 +40,7 @@ private:
                const Eigen::VectorXd& mean,
                const Eigen::MatrixXd& covariance);
 
-    double evalMultivNorm(const Eigen::VectorXd &x,
+    double EvalMultivNorm(const Eigen::VectorXd &x,
                           const Eigen::VectorXd &meanVec,
                           const Eigen::MatrixXd &covMat);
 
@@ -45,6 +48,7 @@ private:
     unsigned int K_;
     unsigned int dimension_;
     unsigned int max_iterations_;
+    double threshold_;
     std::vector<Cluster> clusters_;
     std::vector<Eigen::VectorXd> source_points_;
     Eigen::MatrixXd W_;

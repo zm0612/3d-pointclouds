@@ -4,8 +4,8 @@
 #include "GMM.h"
 #include <random>
 
-GMM::GMM(unsigned int K, unsigned int max_iteration)
-        : K_(K), max_iterations_(max_iteration) {}
+GMM::GMM(unsigned int K, unsigned int max_iteration, double threshold)
+        : K_(K), max_iterations_(max_iteration), threshold_(threshold) {}
 
 void GMM::InitPara() {
     clusters_.resize(K_);
@@ -35,18 +35,39 @@ void GMM::Fit(const std::vector<Eigen::VectorXd> &source_points) {
 
     InitPara();
 
+    double last_log_likelihood = 0.0;
     for (unsigned int i = 0; i < max_iterations_; ++i) {
         double curr_log_likelihood = UpdateW();
-        std::cout << "curr_log_likelihood: " << curr_log_likelihood << std::endl;
+        double delta_log_likelihood = curr_log_likelihood - last_log_likelihood;
+        last_log_likelihood = curr_log_likelihood;
+
+        std::cout << delta_log_likelihood << std::endl;
+        if (std::abs(delta_log_likelihood) < threshold_) {
+            std::cout << "End of iteration, a total of iterations: " << i << std::endl;
+            break;
+        }
 
         UpdatePi();
         UpdateMu();
         UpdateVar();
-        for (int j = 0; j < K_; ++i) {
-            std::cout << "mu: " << clusters_[j].mu_.transpose() << std::endl;
-            std::cout << "cov: " << clusters_[j].covariance_ << std::endl;
-        }
     }
+}
+
+std::vector<GMM::Cluster> GMM::GetClusters() {
+    for (unsigned int i = 0; i < W_.rows(); ++i) {
+        double max_value = std::numeric_limits<double>::min();
+        int index = -1;
+        for (unsigned int j = 0; j < K_; ++j) {
+            if (W_(i, j) > max_value) {
+                max_value = W_(i, j);
+                index = j;
+            }
+        }
+
+        clusters_[index].points_.emplace_back(source_points_[i]);
+    }
+
+    return clusters_;
 }
 
 double GMM::PDF(const Eigen::VectorXd &x,
@@ -58,7 +79,7 @@ double GMM::PDF(const Eigen::VectorXd &x,
     return part_1 * part_2 * part_3;
 }
 
-double GMM::evalMultivNorm(const Eigen::VectorXd &x, const Eigen::VectorXd &meanVec, const Eigen::MatrixXd &covMat) {
+double GMM::EvalMultivNorm(const Eigen::VectorXd &x, const Eigen::VectorXd &meanVec, const Eigen::MatrixXd &covMat) {
     const double logSqrt2Pi = 0.5 * std::log(2 * M_PI);
     typedef Eigen::LLT<Eigen::MatrixXd> Chol;
     Chol chol(covMat);
@@ -88,7 +109,7 @@ void GMM::UpdatePi() {
         }
     }
 
-    for (int i = 0; i < K_; ++i) {
+    for (unsigned int i = 0; i < K_; ++i) {
         clusters_[i].pi_ /= static_cast<double>(source_points_.size());
     }
 }
@@ -106,14 +127,16 @@ void GMM::UpdateVar() {
     }
 }
 
+///TODO: 该函数小概率情况下会导致概率值为无穷大,后续可以针对该函数进行优化,可能是PDF()函数的实现有一些问题
+///TODO: 另外对于GMM的奇异值问题,该算法的实现中并没有考虑进去
 double GMM::UpdateW() {
     double log_likelihood = 0.0;
 
     for (unsigned int i = 0; i < source_points_.size(); ++i) {
         double sum = 0.0;
         for (unsigned int j = 0; j < K_; ++j) {
-//            W_(i, j) = clusters_[j].pi_ * PDF(source_points_[i], clusters_[j].mu_, clusters_[j].covariance_);
-            W_(i, j) = clusters_[j].pi_ * evalMultivNorm(source_points_[i], clusters_[j].mu_, clusters_[j].covariance_);
+//            W_(i, j) = clusters_[j].pi_ * PDF(source_points_[i], clusters_[j].mu_, clusters_[j].covariance_);// My pdf
+            W_(i, j) = clusters_[j].pi_ * EvalMultivNorm(source_points_[i], clusters_[j].mu_, clusters_[j].covariance_);
             sum += W_(i, j);
         }
 

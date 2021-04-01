@@ -14,10 +14,11 @@ include(cmake/eigen.cmake)
 include_directories(include)
 
 add_library(DEP_LIB SHARED
+    src/GMM.cpp
     src/kmeans.cpp
     src/viewer.cpp
-    src/GMM.cpp
     src/generate_data.cpp
+    src/spectral_clustering.cpp
 )
 target_link_libraries(DEP_LIB ${ALL_TARGET_LIBRARIES})
 
@@ -26,6 +27,9 @@ target_link_libraries(test_kmeans DEP_LIB)
 
 add_executable(test_GMM test/test_GMM.cpp)
 target_link_libraries(test_GMM DEP_LIB)
+
+add_executable(test_spectral_clustering test/test_spectral_clustering.cpp)
+target_link_libraries(test_spectral_clustering DEP_LIB)
 
 #add_executable(test_PDF test/test_PDF.cpp)
 #target_link_libraries(test_PDF DEP_LIB)

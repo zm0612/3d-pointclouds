@@ -12,8 +12,8 @@
 
 int main(int argc, char** argv){
     std::vector<Eigen::Vector3d> points;
-//    points = DataGenerator::GenerateNormalDistribution();
-    points = DataGenerator::GenerateCircleDistribution();
+    points = DataGenerator::GenerateNormalDistribution();
+//    points = DataGenerator::GenerateCircleDistribution();
 
     std::vector<Eigen::VectorXd> points_2d;
     for (unsigned int i = 0; i < points.size(); ++i) {

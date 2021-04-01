@@ -22,6 +22,9 @@ public:
     std::vector<Cluster> GetCluster() const;
 
 private:
+    Eigen::MatrixXd SortEigenVectorByValues(const Eigen::VectorXd value, const Eigen::MatrixXd& vector);
+
+private:
     int K_;
     std::vector<Cluster> clusters_;
     Eigen::MatrixXd W_;

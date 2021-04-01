@@ -1,4 +1,3 @@
-
 # 文件功能：
 # 1. 生成模拟聚类数据
 # 2. 调用聚类算法，包括自编的K-Means、GMM，以及sklearn中自带的算法，进行聚类提取
@@ -74,7 +73,6 @@ datasets = [
     (blobs, {}),
     (no_structure, {})]
 
-
 # 一共两层循环，实现每个仿真数据被每种聚类算法调用以此
 # 此处是外层循环，遍历所有仿真数据
 for i_dataset, (dataset, algo_params) in enumerate(datasets):
@@ -126,7 +124,7 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
     birch = cluster.Birch(n_clusters=params['n_clusters'])
     gmm = mixture.GaussianMixture(
         n_components=params['n_clusters'], covariance_type='full')
-    
+
     clustering_algorithms = (
         ('My_KMeans', my_kmeans),
         ('My_GMM', my_gmm),
@@ -152,13 +150,13 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
             warnings.filterwarnings(
                 "ignore",
                 message="the number of connected components of the " +
-                "connectivity matrix is [0-9]{1,2}" +
-                " > 1. Completing it to avoid stopping the tree early.",
+                        "connectivity matrix is [0-9]{1,2}" +
+                        " > 1. Completing it to avoid stopping the tree early.",
                 category=UserWarning)
             warnings.filterwarnings(
                 "ignore",
                 message="Graph is not fully connected, spectral embedding" +
-                " may not work as expected.",
+                        " may not work as expected.",
                 category=UserWarning)
             algorithm.fit(X)
 

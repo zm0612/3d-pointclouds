@@ -4,6 +4,7 @@
 #include "spectral_clustering.h"
 #include "kmeans.h"
 #include <iostream>
+#include "viewer.h"
 
 SpectralClustering::SpectralClustering(int K)
         : K_(K) {}
@@ -26,15 +27,11 @@ void SpectralClustering::Fit(const std::vector<Eigen::VectorXd> &source_points) 
     Eigen::MatrixXd L = D - W_;
 
     Eigen::EigenSolver<Eigen::MatrixXd> eigen_solver(L);
-//    const Eigen::MatrixXd &vector_matrix = eigen_solver.pseudoEigenvectors();
+    const Eigen::VectorXd &value = eigen_solver.eigenvalues().real();
     const Eigen::MatrixXd &vector_matrix = eigen_solver.eigenvectors().real();
-    std::cout << "row: " << vector_matrix.rows() << std::endl;
-    std::cout << "col: " << vector_matrix.rows() << std::endl;
 
-    Eigen::MatrixXd V(source_points.size(), K_);
-    for (int i = 0; i < K_; ++i) {
-        V.col(i) = vector_matrix.col(source_points.size() - i - 1);
-    }
+    Eigen::MatrixXd V;
+    V = SortEigenVectorByValues(value, vector_matrix);
 
     std::vector<Eigen::VectorXd> vs;
     for (unsigned int i = 0; i < V.rows(); ++i) {
@@ -45,6 +42,8 @@ void SpectralClustering::Fit(const std::vector<Eigen::VectorXd> &source_points) 
     kmeans.Clustering(vs);
     std::vector<Kmeans::Cluster> kmeans_cluster = kmeans.GetCluster();
 
+//    PCLViewer::DisplayPointCloud(kmeans_cluster);
+
     clusters_.resize(K_);
     for (int i = 0; i < K_; ++i) {
         for (unsigned int j = 0; j < kmeans_cluster[i].indices_.size(); ++j) {
@@ -53,7 +52,30 @@ void SpectralClustering::Fit(const std::vector<Eigen::VectorXd> &source_points) 
             clusters_[i].points_.emplace_back(source_points[index]);
         }
     }
+}
 
+Eigen::MatrixXd SpectralClustering::SortEigenVectorByValues(const Eigen::VectorXd value,
+                                                            const Eigen::MatrixXd &vector) {
+    std::vector<std::pair<double, Eigen::VectorXd>> value_and_vector;
+    int size = value.rows();
+    value_and_vector.reserve(size);
+
+    for (int i = 0; i < size; ++i) {
+        value_and_vector.push_back({value[i], vector.col(i)});
+    }
+
+    std::sort(value_and_vector.begin(), value_and_vector.end(),
+              [](const std::pair<double, Eigen::VectorXd> &pair1,
+                 const std::pair<double, Eigen::VectorXd> &pair2) -> bool {
+                  return pair1.first < pair2.first;
+              });
+
+    Eigen::MatrixXd matrix(vector.rows(), K_);
+    for (int i = 0; i < K_; ++i) {
+        matrix.col(i) = value_and_vector[i].second;
+    }
+
+    return matrix;
 }
 
 std::vector<SpectralClustering::Cluster> SpectralClustering::GetCluster() const {

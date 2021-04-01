@@ -7,6 +7,7 @@
 
 #include "kmeans.h"
 #include "GMM.h"
+#include "spectral_clustering.h"
 #include <pcl/visualization/cloud_viewer.h>
 
 class PCLViewer{
@@ -18,6 +19,8 @@ public:
     static void DisplayPointCloud(std::vector<Eigen::Vector3d> points);
 
     static void DisplayPointCloud(std::vector<GMM::Cluster> clusters);
+
+    static void DisplayPointCloud(std::vector<SpectralClustering::Cluster> clusters);
 };
 
 #endif //CLUSTER_VIEWER_H

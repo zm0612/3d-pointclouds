@@ -14,7 +14,7 @@ std::vector<Eigen::Vector3d> DataGenerator::GenerateCircleDistribution() {
 
     std::vector<Eigen::Vector3d> points;
 
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 100; ++i) {
         Eigen::Vector3d center = Eigen::Vector3d::Zero();
         center.x() = center_0.x() + n_1(engine);
         center.y() = center_0.y() + n_2(engine);
@@ -41,7 +41,7 @@ std::vector<Eigen::Vector3d> DataGenerator::GenerateNormalDistribution() {
 
     std::vector<Eigen::Vector3d> points;
 
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 100; ++i) {
         Eigen::Vector3d center = Eigen::Vector3d::Zero();
         center.x() = center_0.x() + n_1(engine);
         center.y() = center_0.y() + n_2(engine);

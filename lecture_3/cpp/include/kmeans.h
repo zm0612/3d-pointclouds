@@ -14,6 +14,7 @@ public:
     struct Cluster {
         Eigen::VectorXd center_;
         std::vector<Eigen::VectorXd> points_;
+        std::vector<unsigned int> indices_;
     };
 
     Kmeans(unsigned int K, unsigned int max_iter, double distance_threshold);

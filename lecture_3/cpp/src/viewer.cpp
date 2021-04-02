@@ -50,6 +50,7 @@ void PCLViewer::DisplayPointCloud(std::vector<GMM::Cluster> clusters) {
                                                 "point cloud " + std::to_string(i));
     }
 
+    viewer.addCoordinateSystem(1.0);
     viewer.initCameraParameters();
 
     while (!viewer.wasStopped()) {
@@ -61,15 +62,18 @@ void PCLViewer::DisplayPointCloud(std::vector<Kmeans::Cluster> clusters) {
     pcl::visualization::PCLVisualizer viewer("viewer");
     viewer.setBackgroundColor(0.3, 0.3, 0.3);
 
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr center_points_ptr(new pcl::PointCloud<pcl::PointXYZ>());
-
     for (unsigned int i = 0; i < clusters.size(); ++i) {
         pcl::PointCloud<pcl::PointXYZ>::Ptr source_points_ptr(new pcl::PointCloud<pcl::PointXYZ>());
         for (unsigned int j = 0; j < clusters[i].points_.size(); ++j) {
             pcl::PointXYZ point_xyz;
             point_xyz.x = clusters[i].points_[j].x();
             point_xyz.y = clusters[i].points_[j].y();
-            point_xyz.z = clusters[i].points_[j].z();
+
+            if (clusters[i].points_[j].rows() == 3) {
+                point_xyz.z = clusters[i].points_[j].z();
+            } else{
+                point_xyz.z = 0.0f;
+            }
 
             source_points_ptr->push_back(point_xyz);
         }

@@ -24,6 +24,8 @@ public:
 private:
     Eigen::MatrixXd SortEigenVectorByValues(const Eigen::VectorXd value, const Eigen::MatrixXd& vector);
 
+    void CalcuAdjacencyMatrix(std::vector<Eigen::VectorXd> points);
+
 private:
     int K_;
     std::vector<Cluster> clusters_;

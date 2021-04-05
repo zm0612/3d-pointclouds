@@ -15,6 +15,7 @@ public:
 
     static std::vector<Eigen::Vector3d> GenerateNormalDistribution();
     static std::vector<Eigen::Vector3d> GenerateCircleDistribution();
+    static std::vector<Eigen::Vector3d> GenerateConcentricCircles(double pi);
 };
 
 #endif //CLUSTER_GENERATE_DATA_H

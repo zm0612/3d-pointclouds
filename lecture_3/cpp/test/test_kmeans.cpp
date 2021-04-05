@@ -9,6 +9,7 @@
 int main(int argc, char** argv){
     std::vector<Eigen::Vector3d> points;
     points = DataGenerator::GenerateNormalDistribution();
+//    points = DataGenerator::GenerateConcentricCircles(2*M_PI);
 //    points = DataGenerator::GenerateCircleDistribution();
 
     std::vector<Eigen::VectorXd> points_2d;

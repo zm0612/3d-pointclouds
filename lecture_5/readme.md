@@ -100,11 +100,12 @@ python3 test.py
 
 training_acc：
 
-![training loss](images/training loss.svg)
+![c](images/c.png)
 
 validing_acc:
 
-![validing acc](images/validing acc.svg)
+![b](images/b.png)
 
 最终的测试精度，通过对最终的所有测试数据进行测试，发现pointnet的精度可以达到：__0.833__
 
+> 使用`tensorboard --logdir output/runs/tersorboard`命令，然后打开浏览器查看实时训练结果！

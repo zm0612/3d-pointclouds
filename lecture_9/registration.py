@@ -13,14 +13,20 @@ def get_matches(feature_target, feature_source):
     :param feature_source: open3d.pipeline.registration.Feature
     :return: numpy.ndarray N x 2 [source_index, target_index]
     """
-    search_tree = o3d.geometry.KDTreeFlann(feature_target)
+    search_tree_target = o3d.geometry.KDTreeFlann(feature_target)
+    search_tree_source = o3d.geometry.KDTreeFlann(feature_source)
     _, N = feature_source.data.shape
     matches = []
 
     for i in range(N):
-        query = feature_source.data[:, i]
-        _, nn_target_index, _ = search_tree.search_knn_vector_xd(query, 1)
-        matches.append([i, nn_target_index[0]])
+        query_source = feature_source.data[:, i]
+        _, nn_target_index, _ = search_tree_target.search_knn_vector_xd(query_source, 1)
+
+        query_target = feature_target.data[:, nn_target_index[0]]
+        _, nn_source_index, _ = search_tree_source.search_knn_vector_xd(query_target, 1)
+
+        if nn_source_index[0] == i:
+            matches.append([i, nn_target_index[0]])
 
     matches = np.asarray(matches)
     return matches
@@ -53,13 +59,21 @@ def ransac_registration(keypoints_target, keypoints_source, matches, max_iterati
     return best_T, best_score
 
 
+# def compute_inliers_number():
+#     return numbers
+
+
 def compute_ICP(P, Q):
     center_P = P.mean(axis=0)
     center_Q = Q.mean(axis=0)
     P_normalized = P - center_P
     Q_normalized = Q - center_Q
-    U, s, V = np.linalg.svd(np.dot(Q_normalized, P_normalized.T), full_matrices=True, compute_uv=True)
-    R = np.dot(U, V.T)
+    # print(P)
+    # print(center_P)
+    # print(P_normalized)
+    # U, s, V = np.linalg.svd(np.dot(Q_normalized, P_normalized.T), full_matrices=True, compute_uv=True)
+    U, s, V = np.linalg.svd(np.dot(Q_normalized, P_normalized.T))
+    R = np.dot(U, V)
     t = center_Q - np.dot(R, center_P)
     T = np.zeros((4, 4))
     T[0:3, 0:3] = R
@@ -83,29 +97,31 @@ if __name__ == '__main__':
     pointcloud_o3d_target = o3d.geometry.PointCloud()
     pointcloud_o3d_target.points = o3d.utility.Vector3dVector(pointcloud_numpy_target[:, 0:3])
     pointcloud_o3d_target.normals = o3d.utility.Vector3dVector(pointcloud_numpy_target[:, 3:6])
-    pointcloud_o3d_target, _ = pointcloud_o3d_target.remove_radius_outlier(nb_points=4, radius=0.5)
+    # pointcloud_o3d_target, _ = pointcloud_o3d_target.remove_radius_outlier(nb_points=4, radius=0.5)
 
     keypoints_target = detector.detect_ISS(pointcloud_o3d_target)
     descriptor_target = descriptor.compute_fpfh(keypoints_target)
 
     pointcloud_numpy_source = utility.read_oxford_bin(arguments.file_path[1])
     pointcloud_o3d_source = o3d.geometry.PointCloud()
+    transformed_source = np.array([[0, -1, 0, 5], [1, 0, 0, 5], [0, 0, 1, 5], [0, 0, 0, 1]])
     pointcloud_o3d_source.points = o3d.utility.Vector3dVector(pointcloud_numpy_source[:, 0:3])
     pointcloud_o3d_source.normals = o3d.utility.Vector3dVector(pointcloud_numpy_source[:, 3:6])
-    pointcloud_o3d_source, _ = pointcloud_o3d_source.remove_radius_outlier(nb_points=4, radius=0.5)
+    # pointcloud_o3d_source, _ = pointcloud_o3d_source.remove_radius_outlier(nb_points=4, radius=0.5)
 
     keypoints_source = detector.detect_ISS(pointcloud_o3d_source)
     descriptor_source = descriptor.compute_fpfh(keypoints_source)
 
     matches = get_matches(descriptor_target, descriptor_source)
-    T, score = ransac_registration(keypoints_target, keypoints_source, matches, arguments.iterations, 2.5)
+    T, score = ransac_registration(keypoints_target, keypoints_source, matches, arguments.iterations, 1.0)
+    print("matches", len(matches))
     print("T: \n", T)
     print("\n score: ", score)
 
     o3d.visualization.draw_geometries([pointcloud_o3d_target, pointcloud_o3d_source])
 
     icp = o3d.pipelines.registration.registration_icp(
-        pointcloud_o3d_source, pointcloud_o3d_target, 10.0, T
+        pointcloud_o3d_source, pointcloud_o3d_target, 5.0, T
     )
 
     transformed_pointcloud_source = pointcloud_o3d_source.transform(icp.transformation)

@@ -8,7 +8,7 @@ import detector
 
 def compute_fpfh(
         pointcloud_with_normal,
-        search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=3, max_nn=50)
+        search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=5, max_nn=100)
 ):
     feature_fpfh = o3d.pipelines.registration.compute_fpfh_feature(pointcloud_with_normal, search_param=search_param)
     return feature_fpfh

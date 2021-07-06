@@ -42,9 +42,40 @@ def display_oxford_pointcloud_with_normal(pointcloud: np.ndarray):
     o3d.visualization.draw_geometries([pointcloud_o3d], point_show_normal=True)
 
 
+def display_registration_result(
+        keypoints_source, keypoints_target, matches,
+        pointcloud_source, pointcloud_target
+):
+    N, _ = matches.shape
+    points = np.vstack(
+        (
+            np.asarray(keypoints_source.points)[matches[:, 0]],
+            np.asarray(keypoints_target.points)[matches[:, 1]]
+        )
+    )
+    association = np.asarray(
+        [
+            [i, i + N] for i in np.arange(N)
+        ]
+    )
+
+    correspondence_set = o3d.geometry.LineSet(
+        points=o3d.utility.Vector3dVector(points),
+        lines=o3d.utility.Vector2iVector(association)
+    )
+    correspondence_set.paint_uniform_color([1, 0, 0])
+    o3d.visualization.draw_geometries(
+        [
+            pointcloud_source, pointcloud_target,
+            correspondence_set
+        ]
+    )
+
+
 def get_arguments():
     parser = argparse.ArgumentParser(description="utility of reading and displaying point cloud")
     parser.add_argument('-f', '--file_path', help='point cloud file path', required=True, type=str)
+
     parser.add_argument('-d', '--display', action='store_true', help='need to display the point cloud')
     parser.add_argument('-n', '--normal', action='store_true',
                         help='display the normals, need to set -d and -n at the same time')

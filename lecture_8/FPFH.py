@@ -87,7 +87,7 @@ def compute_FPFH(pointcloud, tree, point_index, radius, B):
 
 
 if __name__ == '__main__':
-    file_path = 'data/chair_0001.txt'
+    file_path = 'chair_data/chair_0001.txt'
     point_cloud_list = utility.read_pointcloud_with_normal(file_path)
 
     point_cloud_numpy = np.asarray(point_cloud_list)

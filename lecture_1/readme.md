@@ -62,12 +62,14 @@ public:
 在计算主成分时，使用Eigen库中提供的svd分解函数，其部分代码如下：
 
 ```cpp
+// 注意：在课件中协方差矩阵的计算没有除以样本的数量，这里加上了，会更加严谨一些，根据协方差的计算公式应该是除以n-1，而不是除以n，目的是抵消协方差自身的相关性
 void PrincipleComponentAnalysis::CalculatePrincipleVector() {
     Eigen::Vector3d center = X_.rowwise().mean();
-    Eigen::MatrixXd normalized_X = X_.colwise() - center;
+    Eigen::MatrixXd X_decentralized = X_.colwise() - center;
+    Eigen::Matrix3d variance_matrix = X_decentralized * X_decentralized.transpose() / X_.cols();
 
-    Eigen::JacobiSVD<Eigen::MatrixXd> svd(normalized_X, Eigen::ComputeFullU);
-    principle_vector_ = svd.matrixU();
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(variance_matrix, Eigen::ComputeFullV);
+    principle_vector_ = svd.matrixV();
 }
 ```
 

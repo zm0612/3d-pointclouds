@@ -21,16 +21,17 @@ void PrincipleComponentAnalysis::InputData(const ModelData::TypeVertexVector &po
     X_.resize(3, number_points);
 
     for (int i = 0; i < number_points; ++i) {
-        X_.block<3,1>(0, i) = points[i];
+        X_.block<3, 1>(0, i) = points[i];
     }
 }
 
 void PrincipleComponentAnalysis::CalculatePrincipleVector() {
     Eigen::Vector3d center = X_.rowwise().mean();
-    Eigen::MatrixXd normalized_X = X_.colwise() - center;
+    Eigen::MatrixXd X_decentralized = X_.colwise() - center;
+    Eigen::Matrix3d variance_matrix = X_decentralized * X_decentralized.transpose() / X_.cols();
 
-    Eigen::JacobiSVD<Eigen::MatrixXd> svd(normalized_X, Eigen::ComputeFullU);
-    principle_vector_ = svd.matrixU();
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(variance_matrix, Eigen::ComputeFullV);
+    principle_vector_ = svd.matrixV();
 }
 
 Eigen::Vector3d PrincipleComponentAnalysis::CalculateNormalVector() {
@@ -43,7 +44,7 @@ Eigen::Vector3d PrincipleComponentAnalysis::CalculateNormalVector() {
 }
 
 Eigen::MatrixXd PrincipleComponentAnalysis::Encoder(unsigned int dim) {
-    if (dim > principle_vector_.cols()){
+    if (dim > principle_vector_.cols()) {
         std::cerr << "dimension greater than number of principle vector!" << std::endl;
     }
 
